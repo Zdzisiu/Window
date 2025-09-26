@@ -1,0 +1,132 @@
+items : array
+{
+	"Books"
+	"Radio"
+	"Lamp"
+	"Coins"
+	"Pie"
+	"Seeds"
+	"Knife"
+	"Egg"
+	"Cacti"
+	"Flowers"
+	"Sapling"
+}
+
+time
+{
+	case hour
+	{
+		when 20-23,0-2; "Night"
+		when 19; "Dusk"
+		when 18; "Sunset"
+		when 7-17; "Day"
+		when 6; "Sunrise"
+		when 4-6; "Dawn"
+	}
+}
+
+timeSurface
+{
+	case _argv[0]
+	{
+		when "Night"; "\i[7]"
+		when "Day"; "\i[4]"
+		when "Sunrise"; "\i[3]"
+		when "Dawn"; "\i[8]"
+		when "Sunset"; "\i[5]"
+		when "Dusk"; "\i[6]"
+	}
+}
+
+timeArray : array
+{
+	"Night"
+	"Day"
+	"Sunrise"
+	"Dawn"
+	"Sunset"
+	"Dusk"
+}
+
+BackgroundArray : array
+{
+	"Rain"
+	"Day"
+	"Moon"
+	"Crows"
+	"Apple"
+	"Bird"
+	"Blood Moon"
+	"Lake Forest"
+	"Desert"
+	"Blossom"
+	"Forest"
+}
+
+Backgrounds
+{
+	case _argv[0]
+	{
+		when "Rain"; "\i[9]"
+		when "Day"
+		{
+			if syncStat == 1; timeSurface(time)
+			elseif SetTime != "OFF"; timeSurface(SetTime)
+			else; timeSurface("Day")
+		}
+		when "Moon"; "\i[18]"
+		when "Crows"
+		{
+			if syncStat == 1; "%(timeSurface(time))\i[10]"
+			elseif SetTime != "OFF"; "%(timeSurface(SetTime))\i[10]"
+			else; "%(timeSurface('Day'))\i[10]"
+		}
+		when "Apple"
+		{
+			if syncStat == 1; "%(timeSurface(time))\i[11]"
+			elseif SetTime != "OFF"; "%(timeSurface(SetTime))\i[11]"
+			else; "%(timeSurface('Day'))\i[11]"
+		}
+		when "Bird"
+		{
+			if syncStat == 1; "%(timeSurface(time))\i[12]"
+			elseif SetTime != "OFF"; "%(timeSurface(SetTime))\i[12]"
+			else; "%(timeSurface('Day'))\i[12]"
+		}
+		when "Blood Moon"; "\i[13]"
+		when "Lake Forest"; "\i[14]"
+		when "Desert"; "\i[17]"
+		when "Blossom"
+		{
+			if syncStat == 1; "%(timeSurface(time))\i[15]"
+			elseif SetTime != "OFF"; "%(timeSurface(SetTime))\i[15]"
+			else; "%(timeSurface('Day'))\i[15]"
+		}
+		when "Forest"; "\i[16]"
+		when "Day"; "\i[16]"
+		others; ""
+	}
+}
+
+GetBG
+{
+	if syncStat == 1; timeSurface(time)
+	elseif SetTime != "OFF"; timeSurface(SetTime)
+	else; timeSurface("Day")
+	--
+	if SetBG != "OFF"; Backgrounds(SetBG)
+	elseif CurrentItem != -1 && BackgroundOverride != 1; Backgrounds(BackgroundArray[CurrentItem])
+}
+
+open
+{
+	"\i[104]\w8\w8\![anim,clear,104]\i[103,wait]\![anim,clear,103]\i[101]"
+	WindowState = 1
+}
+
+close
+{
+	"\i[101]\w8\w8\![anim,clear,101]\i[102,wait]\w8\![anim,clear,102]\i[104]"
+	WindowState = 0
+}

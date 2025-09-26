@@ -1,0 +1,268 @@
+OnTranslate
+{
+	_talk = reference0
+	
+	//This is what makes %(embedded_elements) work in script input
+	if reference1 == "" && reference2 == "" //If this is from the input box
+	{ //send input box : no event (ref2) , no special flag (ref1)
+		_talk = EVAL('"' + REPLACE(_talk,'"','""') + '"')
+	}
+	
+	//If you want to add anything to OnTranslate, like text replacement, I would put it after this point, generally. Just make sure it's before the TOSTR(_talk)
+	
+	TOSTR(_talk)
+}
+
+//This is just here so you can use anchors to link to websites if you want. You can link to websites with normal menu choice tags! If you do, a handy URL preview will show up in the balloon!
+OnAnchorSelect
+{
+	if "http://" _in_ reference0 || "https://" _in_ reference0; "\j[""%(reference0)""]"
+}
+
+//Hotkeys
+OnKeyPress
+{
+	if reference0 == "f1"; "\![open,readme]"
+	elseif reference0 == "t"; OnAiTalk
+	elseif reference0 == "r"; OnLastTalk
+}
+
+//Happens about 30 seconds after a script ends, by default, to bring them back to normal poses
+OnSurfaceRestore
+{
+	if prevBG != currBG || prevTime != currTime
+	{
+		"\b[-1]%(close)\0\s[0]%(GetBG)%(open)"
+		prevTime = currTime
+		prevBG = currBG
+	}
+	else; "\b[-1]\1\s[-1]\0\s[0]\i[101]%(GetBG)"
+}
+
+OnRestore
+{
+	if prevBG != currBG || prevTime != currTime
+	{
+		"\b[-1]%(close)\0\s[0]%(GetBG)%(open)"
+		prevTime = currTime
+		prevBG = currBG
+	}
+	else; "\b[-1]\1\s[-1]\0\s[0]\i[101]%(GetBG)"
+}
+
+//Happens when the ghost is unminimized. You can customize what surfaces are used here/if there's dialogue, but by default I've set it to just go to OnSurfaceRestore
+OnWindowStateRestore
+{
+	OnSurfaceRestore
+}
+
+//Network update url. Make sure you have a / on the end of the url or it will give a warning every time users try to update! If you don't plan to use network updates you can remove this
+//IF YOU'RE USING GITHUB FOR NETWORK UPDATES: DO NOT USE github.io URLS! It will cause you pain and suffering. USE raw.githubusercontent!!!
+//To get the raw.githubusercontent link super easy:
+//• Open your ghost's repo online
+//• navigate to the ghost's folder (the top level one, with install.txt, readme.txt, etc)
+//• Click on install.txt, or another text file on that level
+//• Once on that page, click the "raw" button. You should see the url now starts with raw.githubusercontent
+//• Copy that url exactly as is, but *leave off the "install.txt" or whatever file name at the end.*
+//Tada! That's your url! Make sure you test it! The dev palette and script/network log can help with that
+On_homeurl
+{
+	""
+}
+
+
+//—————————————————————————————— Right click menu links ——————————————————————————————
+
+//Takes an array of alternating names and urls, and formats them for use with the right click menu
+FormatLinks : all
+{
+	for _i = 0; _i < ARRAYSIZE(_argv); _i++
+	{
+		_argv[_i] //Add the link/title
+		//Alternate between adding %ASC(1) or %ASC(2)
+		if _i % 2 == 1; "%ASC(2)"
+		else; "%ASC(1)"
+	}
+}
+
+On_sakura.recommendsites
+{
+	FormatLinks(recommendsites_sakura)
+}
+
+//These are the websites linked in the top option of the sakura's right click menu. The format is simple; write the label of the link on the left followed by a semicolon, and then on the right, the url to link to. These should be separate strings.
+recommendsites_sakura : array
+{
+	"Link label";	"https://link.example.com/link/to/whatever/here/"
+}
+
+On_sakura.portalsites 
+{
+	FormatLinks(portalsites_sakura)
+}
+
+//These are the websites linked in the second option of the sakura's right click menu. Same as above
+portalsites_sakura : array
+{
+	"Another link label";	"https://link.example.com/link/to/whatever/here/again/"
+	"A third link label";	"https://link.example.com/link/to/whatever/a/third/time/you/can/add/as/many/as/you/want/"
+}
+
+On_kero.recommendsites
+{
+	FormatLinks(recommendsites_kero)
+}
+
+//These are the websites linked in the first option of the kero's right click menu. Same as above
+recommendsites_kero : array
+{
+	"These labels can be anything you want";	"https://link.example.com/link/to/whatever/here/once/more/"
+}
+
+
+//—————————————————————————————— User pronoun related ——————————————————————————————
+
+they
+{
+	if SHIORI3FW.UserSex == "male"; "he"
+	elseif SHIORI3FW.UserSex == "female"; "she"
+	else; "they"
+}
+
+them
+{
+	if SHIORI3FW.UserSex == "male"; "him"
+	elseif SHIORI3FW.UserSex == "female"; "her"
+	else; "them"
+}
+
+their
+{
+	if SHIORI3FW.UserSex == "male"; "his"
+	elseif SHIORI3FW.UserSex == "female"; "her"
+	else; "their"
+}
+
+theirs
+{
+	if SHIORI3FW.UserSex == "male"; "his"
+	elseif SHIORI3FW.UserSex == "female"; "hers"
+	else; "theirs"
+}
+
+themself
+{
+	if SHIORI3FW.UserSex == "male"; "himself"
+	elseif SHIORI3FW.UserSex == "female"; "herself"
+	else; "themself"
+}
+
+//%(they) %(p('are','is'))
+//You can change the name of this function if you want! I kept it short so it's fast to type
+p
+{
+	if SHIORI3FW.UserSex == "undef"; _argv[0] //they are
+	else; _argv[1] //he is/she is
+}
+
+/*
+
+An example of the above setup:
+"%(they) %(p('were','was')) looking for that earlier, I'll ask if %(they)'%(p('ve','s')) found it."
+
+If using they, the %(p) functions will return the first word specified, resulting in:
+"they were looking for that earlier, I'll ask if they've found it."
+
+If not using they, for example if using she, it will return the second specified word instead, resulting in:
+"she was looking for that earlier, I'll ask if she's found it."
+
+With this function, you can quickly customize words that need to change based on whether it should be singular or plural. Just remember; the %(p) function is set up so that the first word you specify matches with the 'they' labels used on the pronoun functions. You can always switch that around if you like, too.
+
+*/
+
+//This just makes %(username) match with the username determined by the SSP prefs, rather than having to use the %username environment variable which is *not* the same and which you can't do things like TOUPPER to.
+//If you want to have the user be able to set a nickname or something, you may want to change username to a variable instead and get rid of this!
+username
+{
+	SHIORI3FW.UserName
+}
+
+//Use this function by using it in a dialogue or your code
+//Code: ARRAYADD('1,2,3,4') || ARRAYADD(array) 
+//Dialogue: %(ARRAYADD('1,2,3,4')) || %(ARRAYADD(array))
+ARRAYADD //ARRAYADD(array)
+{
+    _return = 0
+    _a = _argv //split array
+    _size = ARRAYSIZE(_a) //get the arrays size
+    --
+    for _i=0;_i<_size;_i++
+    {
+        _return += TOINT(_a[_i]) //add the numbers
+    }
+    --
+    _return //return the result
+}
+
+//Written by Zichqec https://ukagaka.zichqec.com/
+/*
+This function and event are for quickly checking if a character is wearing a given dressup. Something like "If they're wearing a scarf, do this".
+This is intended to be simplified for folks that just need quick, easy checks. If your dressups are more involved or you want to do more complicated checks, you may need to write some custom code in OnNotifyDressupInfo. **This is not the only way to do dressup checks.**
+
+Arguments:
+Arguments are written as a **single comma separated string** rather than separate elements.
+Arg 1: Which character (0 for sakura, 1 for kero, 2+ for additional characters...)
+Arg 1: Dressup category
+Arg 2: Dressup name
+
+Usage example:
+if WearingDressup("0,Hat,Silly")
+{
+	"\0\s[0]I'm wearing a silly hat!"
+}
+
+Customizing this function:
+- If you only have one character, then you may want to omit the need for specifying which character a dressup is on.
+- If all of your items have completely unique names, you may want to omit the need to specify which category the item is.
+However you want to change it, just go to the _info array created in OnNotifyDressupInfo (there's a comment just above it showing where it's at), and edit what parameters are included/what order they're listed in to suit you.
+For example, if you change it to _info = "%(_item_name),%(_category)"
+Then you can write your check like if WearingDressup("Silly,Hat")
+
+Note:
+This makes use of the OnNotifyDressupInfo event, which you can read more about here: https://ukagakadreamteam.github.io/ukadoc/manual/list_shiori_event.html#OnNotifyDressupInfo
+If you already have OnNotifyDressupInfo, you may need to modify it to suit this function.
+
+This also makes use of a global variable called CurrentDressups.
+You should initialize CurrentDressups with the following code in OnFirstBoot:
+CurrentDressups = IARRAY
+*/
+
+WearingDressup
+{
+	if ASEARCH(_argv[0],CurrentDressups) != -1; 1
+	else; 0
+}
+
+//[character ID, category name, part name, option, on-1/off-0, thumbnail path]
+OnNotifyDressupInfo
+{
+	CurrentDressups = IARRAY
+	foreach reference; _dressup
+	{
+		_dressup = SPLIT(_dressup,C_BYTE1)
+		_id = _dressup[0]
+		_category = _dressup[1]
+		_item_name = _dressup[2]
+		
+		//Edit here if you want to change what all you have to specify! This just specifies the form you want the dressups to be listed as.
+		_info = "%(_id),%(_category),%(_item_name)"
+		
+		if _dressup[4] == "1"; CurrentDressups ,= _info
+	}
+}
+
+onnoff
+{
+    if _argv[0] == 1; "ON"
+    else; "OFF"
+}

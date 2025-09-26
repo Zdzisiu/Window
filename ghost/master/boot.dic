@@ -1,0 +1,54 @@
+OnFirstBoot
+{
+	//If you add variables, make sure to initialize them here!
+	//Note - I haven't added anything about username or pronouns here because it's all handled by the SSP prefs
+	stroke = 0
+	LastTalk = ""
+	inventory = IARRAY
+	inventory = (0,0,0,0,0,0,0,0,0,0,0)
+	interactions = (0,0,0,0,0,0,0,0,0,0,0)
+	SetBG = "OFF"
+	SetTime = "OFF"
+	prevBG = ""
+	prevTime = time
+	BackgroundOverride = 0
+
+	while TOINT(ARRAYADD(inventory)) < 3
+	{
+		_rand = RAND(11)
+		if _rand != 6 && _rand != 7; inventory[_rand] = 1
+	}
+
+	WindowState = 1
+	
+	"\1\s[-1]\0\s[0]%(GetBG)%(open)The window opens . . ."
+}
+
+OnInitialize
+{
+	WindowState = 1
+	while TOINT(ARRAYADD(inventory)) < 3
+	{
+		_rand = RAND(11)
+		if _rand != 6 && _rand != 7; inventory[_rand] = 1
+	}
+
+	"\![sound,load,trombone.wav,(option)]"
+	
+	if reference0 != "reload" //For things you want to reset EXCEPT when just reloading; a convenience for you the dev, basically
+	{
+		LastTalk = ""
+	}
+}
+
+OnBoot
+{
+	"\1\s[-1]\0\s[0]%(GetBG)%(open)The window opens . . ."
+}
+
+OnClose
+{
+	"\1\s[-1]\0\s[0]%(GetBG)%(close)The window closes . . ."
+	--
+	"\w8\w8\-" //This is what makes the ghost close (after a short pause), do not remove the \- , and MAKE SURE you don't use a \e before this point or it won't work
+}

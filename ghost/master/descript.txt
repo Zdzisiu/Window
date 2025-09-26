@@ -1,0 +1,17 @@
+charset,UTF-8
+
+name,Window
+type,ghost
+
+shiori,yaya.dll
+
+craftman,Zdzisiu
+craftmanw,Zdzisiu
+craftmanurl,
+
+sakura.name,Window
+kero.name,Null
+
+icon,icon.ico
+
+sstp.allowunspecifiedsend,0
