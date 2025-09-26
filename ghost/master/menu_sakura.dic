@@ -30,7 +30,7 @@ OnInventory : all
 	{
 		_display += "\__q[OnChangeItem," + _item + "]" + _item +"\n"
 	}*/
-
+	
 	_display
 }
 
@@ -83,14 +83,16 @@ OnInteract : all
 		when 1
 		{
 			_rand = 0
-			_inventoryC = TOINT(ARRAYADD(inventory))
-
-			while TOINT(ARRAYADD(inventory)) < (_inventoryC + 1)
+			if TOINT(ARRAYADD(inventory)) < ARRAYSIZE(items)
 			{
-				_rand = RAND(11)
-				if _rand != 6; inventory[_rand] = 1
-			}
+				_inventoryC = TOINT(ARRAYADD(inventory))
 
+				while TOINT(ARRAYADD(inventory)) < (_inventoryC + 1)
+				{
+					_rand = RAND(11)
+					if _rand != 6; inventory[_rand] = 1
+				}
+			}
 			--
 			"\i[103]\i[22,wait]"
 			"\![anim,clear,103]\i[101]"
@@ -110,12 +112,15 @@ OnInteract : all
 		when 3
 		{
 			_rand = 0
-			_inventoryC = TOINT(ARRAYADD(inventory))
 
-			while TOINT(ARRAYADD(inventory)) < (_inventoryC + 1)
+			if TOINT(ARRAYADD(inventory)) < ARRAYSIZE(items)
 			{
-				_rand = RAND(11)
-				if _rand != 6; inventory[_rand] = 1
+				_inventoryC = TOINT(ARRAYADD(inventory))
+				while TOINT(ARRAYADD(inventory)) < (_inventoryC + 1)
+				{
+					_rand = RAND(11)
+					if _rand != 6; inventory[_rand] = 1
+				}
 			}
 			--
 			"\i[103,wait]"
@@ -169,12 +174,15 @@ OnInteract : all
 		when 9
 		{
 			_rand = 0
-			_inventoryC = TOINT(ARRAYADD(inventory))
-
-			while TOINT(ARRAYADD(inventory)) < (_inventoryC + 1)
+			if TOINT(ARRAYADD(inventory)) < ARRAYSIZE(items)
 			{
-				_rand = RAND(11)
-				if _rand != 6; inventory[_rand] = 1
+				_inventoryC = TOINT(ARRAYADD(inventory))
+
+				while TOINT(ARRAYADD(inventory)) < (_inventoryC + 1)
+				{
+					_rand = RAND(11)
+					if _rand != 6; inventory[_rand] = 1
+				}
 			}
 			--
 			"\i[103,wait]"

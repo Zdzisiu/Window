@@ -2,10 +2,9 @@ OnFirstBoot
 {
 	//If you add variables, make sure to initialize them here!
 	//Note - I haven't added anything about username or pronouns here because it's all handled by the SSP prefs
-	stroke = 0
-	LastTalk = ""
 	inventory = IARRAY
 	inventory = (0,0,0,0,0,0,0,0,0,0,0)
+	inventory = IARRAY
 	interactions = (0,0,0,0,0,0,0,0,0,0,0)
 	SetBG = "OFF"
 	SetTime = "OFF"
