@@ -32,8 +32,6 @@ OnInitialize
 		_rand = RAND(11)
 		if _rand != 6 && _rand != 7; inventory[_rand] = 1
 	}
-
-	"\![sound,load,trombone.wav,(option)]"
 	
 	if reference0 != "reload" //For things you want to reset EXCEPT when just reloading; a convenience for you the dev, basically
 	{

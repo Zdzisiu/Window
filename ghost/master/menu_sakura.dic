@@ -44,7 +44,7 @@ OnChangeItem : all
 		prevBG = currBG
 		currBG = BackgroundArray[CurrentItem]
 		--
-		if reference0 == "Radio"; "\![sound,loop,trombone.wav]"
+		if reference0 == "Radio"; "\![sound,loop,trombone.wav,--volume=20]"
 		else; "\![sound,stop,trombone.wav]"
 		--
 		if interactions[CurrentItem] != 1; OnInteract(CurrentItem)
@@ -54,6 +54,7 @@ OnChangeItem : all
 	{
 		"You put the %(reference0) away . . ."
 		"\![bind,item,%(reference0),0]"
+		"\![sound,stop,trombone.wav]"
 		CurrentItem = -1
 		prevBG = currBG
 
@@ -196,9 +197,10 @@ OnInteract : all
 
 OnResponse
 {
+	_rand = 0
+	--
 	if TOINT(ARRAYADD(inventory)) < ARRAYSIZE(items)
 	{
-		_rand = 0
 		_inventoryC = TOINT(ARRAYADD(inventory))
 
 		if TOINT(reference0) != 7
