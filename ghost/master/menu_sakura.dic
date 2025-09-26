@@ -123,7 +123,7 @@ OnInteract : all
 			"\![anim,clear,103]\i[101]"
 			"\![anim,clear,101]\i[102,wait]\w3\![anim,clear,102]\i[104]"
 			"\![anim,clear,38]%(open)"
-			if TOINT(ARRAYADD(inventory)) < ARRAYSIZE(items); "lies on the ground."
+			if TOINT(ARRAYADD(inventory)) < ARRAYSIZE(items); "%(items[_rand]) lies on the ground."
 			interactions[3] = 1
 		}
 		when 4
